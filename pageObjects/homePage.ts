@@ -1,13 +1,14 @@
 import { Locator, expect, Page } from "@playwright/test";
 
-export class HomePage {
+import { BasePage } from "./basePage";
 
-    readonly page: Page;
+export class HomePage extends BasePage {
+
     readonly welcomeMessage: Locator;
     readonly logoutButton: Locator;
 
     constructor(page: Page) {
-        this.page = page
+        super(page)
         this.welcomeMessage = page.getByText('Welcome')
         this.logoutButton = page.getByRole('button', { name: 'Log out' })
     }
@@ -26,12 +27,17 @@ export class HomePage {
         await this.welcomeMessage.isVisible()
     }
 
+    async assertThatWelcomeMessageDisplaysCorrectFirstAndLastName(firstName: string, lastName: string) {
+        await expect(this.welcomeMessage).toHaveText(`Welcome ${firstName} ${lastName}`)
+    }
+
     async assertThatLogoutButtonIsDisplayed() {
         await this.logoutButton.isVisible()
     }
 
     // GROUP ASSERTIONS
     async assertThatHomePageIsDisplayed() {
+        await this.waitForShortDuration();
         await this.assertThatPageURLIsCorrect()
         await this.assertThatWelcomeMessageIsDisplayed()
         await this.assertThatLogoutButtonIsDisplayed()
