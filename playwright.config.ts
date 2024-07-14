@@ -14,6 +14,9 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         // Use "database" with existing accounts
         storageState: setupFile,
+        trace: 'on-first-retry',
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
       },
       dependencies: ['setup'],
     },
